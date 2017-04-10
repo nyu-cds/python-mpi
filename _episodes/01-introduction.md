@@ -10,8 +10,10 @@ keypoints:
 
 Program
 : an executable file residing on disk
+
 Process (or task)
 : one or more executing instances of a program. Processes have separate address spaces.
+
 Thread (or lightweight process)
 : one or more threads of control within a process. Threads share the same address space.
 
