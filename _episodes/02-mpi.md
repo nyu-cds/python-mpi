@@ -128,6 +128,8 @@ Process 0 received the number 0.815583406506
 The Send and Recv functions are referred to as blocking functions. If a process calls Recv it will simply wait until a message from the 
 corresponding Send in received before proceeding. Similarly the Send will wait until the message has been reveived by the corresponding Recv.
 
+![blocking send]({{ page.root }}/fig/02-blocking-send.png "blocking send")
+
 ## Deadlock
 
 Because Send and Recv are blocking functions, a very common situation that can occur is called deadlock. This happens when one process is 
@@ -183,6 +185,8 @@ receiving a message back again.
 
 Let's modify the previous code so that when the process 0 receives the number, it multiplies it by two and sends it back to process 1. 
 Process 1 should then print out the new value. 
+
+![round trip]({{ page.root }}/fig/02-round-trip.png "round trip")
 
 ~~~
 import numpy
