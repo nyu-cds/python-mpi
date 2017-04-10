@@ -1,16 +1,19 @@
 ---
 title: "Introduction"
-teaching: 10
-exercises: 20
+teaching: 30
+exercises: 0
 questions:
 objectives:
 keypoints:
 ---
 ## Definitions
 
-Program - an executable file residing on disk
-Process (or task) - one or more executing instances of a program. Processes have separate address spaces.
-Thread (or lightweight process) - one or more threads of control within a process. Threads share the same address space.
+Program
+: an executable file residing on disk
+Process (or task)
+: one or more executing instances of a program. Processes have separate address spaces.
+Thread (or lightweight process)
+: one or more threads of control within a process. Threads share the same address space.
 
 ![definitions]({{ page.root }}/fig/01-prog-proc-thread.png "definitions")
 
