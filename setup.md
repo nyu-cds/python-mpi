@@ -3,13 +3,37 @@ layout: page
 title: Setup
 permalink: /setup/
 ---
-The first thing will need is an account on <a href="https://imgur.com" target="_blank">Imgur</a> if you don't already have one. Go to the web site 
-and select the <a href="https://imgur.com/register?invokedBy=regularSignIn" target="_blank">sign up</a> link. Follow the the instructions to register.
+## Microsoft MPI
 
-Once you have created an account, you will need to register 
-<a href="https://api.imgur.com/oauth2/addclient" target="_blank">an application</a>. First, enter a name
-for the application, which can be anything, but probably needs to be unique (e.g. containing your Net ID). Then select 
-"`Anonymous usage without user authorization`" for the **`Authorization type`**. Next, enter "`https://imgur.com`" for the 
-**`Authorization callback URL`**. Finally, enter an email addres and click on **`submit`**.
+To use MPI with Windows, you will need to install the free download of Microsoft MPI. Go to the 
+[installation page](https://www.microsoft.com/en-us/download/details.aspx?id=54607) and 
+download `MSMpiSetup.exe`. Once downloaded, run the executable and follow the instructions.
 
-You should now see a new page containing a **`Client ID`**. You will need to copy this ID for use later.
+Next, add the path `C:\Program Files\Microsoft MPI\bin` to the `PATH` environment variable. You can do this
+by typing the command:
+
+~~~
+PATH=%PATH%;C:\Program Files\Microsoft MPI\bin
+~~~
+{: .bash}
+
+If you want to set the `PATH` permanently, follow [these instructions](http://www.computerhope.com/issues/ch000549.htm).
+ 
+## MPI for Python
+
+MPI for Python provides bindings of the Message Passing Interface (MPI) standard for the Python programming language, allowing any 
+Python program to exploit multiple processors. 
+
+This package is constructed on top of the MPI-1/2/3 specifications and provides an 
+object oriented interface which resembles the MPI-2 C++ bindings. It supports point-to-point (sends, receives) and collective 
+(broadcasts, scatters, gathers) communications of any picklable Python object, as well as optimized communications of Python 
+object exposing the single-segment buffer interface (NumPy arrays, builtin bytes/string/array objects).
+
+To install mpi4py, enter the command:
+
+~~~
+conda install mpi4py
+~~~
+{: .bash}
+
+On Mac OS X and Linux, this will install *both* MPI for Python and Open MPI. On Windows, it will only install MPI for Python.
