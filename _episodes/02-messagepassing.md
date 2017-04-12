@@ -3,8 +3,15 @@ title: "Message Passing"
 teaching: 40
 exercises: 20
 questions:
+- "What are the fundamental communication primitives?"
+- "What is point-to-point communication?"
 objectives:
+- "Write your first MPI program."
+- "Understand communication primitives."
 keypoints:
+- "MPI uses the notion of a rank to distinguish processes."
+- "Send and Recv are the fundumental primitives."
+- "Sending a message from one process to another is known as point-to-point communication."
 ---
 The most commonly used method of programming distributed-memory MIMD systems is message passing, or some variant of message passing. 
 MPI is the most widely used standard.
@@ -171,8 +178,9 @@ Process 1 drew the number 0.815583406506
 ~~~
 {: .output}
 
-The `Send` and `Recv` functions are referred to as blocking functions. If a process calls `Recv` it will simply wait until a message from the 
-corresponding `Send` is received before proceeding. Similarly the `Send` will wait until the message has been reveived by the corresponding `Recv`.
+The `Send` and `Recv` functions are referred to as blocking functions (we will look at non-blocking functions later). If a process calls `Recv` it 
+will simply wait until a message from the  corresponding `Send` is received before proceeding. Similarly the `Send` will wait until the message has 
+been reveived by the corresponding `Recv`.
 
 ![blocking send]({{ page.root }}/fig/02-blocking-send.png "blocking send")
 

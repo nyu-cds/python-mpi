@@ -3,8 +3,14 @@ title: "Non-blocking Communication"
 teaching: 20
 exercises: 10
 questions:
+- "What is the difference between blocking and non-blocking communication?"
+- "How can I used non-blocking communication to improve the efficiency of my program?"
 objectives:
+- "Understand the difference between blocking and non-blocking communication."
+- "Understand how non-blocking communication can improve program performance."
 keypoints:
+- "There are different methods for blocking and non-blocking communication."
+- "By overlapping communication and computation, better performance can be achieved."
 ---
 So far we have seen how to send and receive messages using blocking communication. In this case, the sender or receiver is not able to perform any 
 other actions until the corresponding message has been sent or received (to be accurate, it is actually until the buffer is safe to use.)
