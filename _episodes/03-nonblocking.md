@@ -60,7 +60,7 @@ if rank == 0:
 Run this program using the command:
 
 ~~~
-mpiexec -np 4 python mpi5.py
+mpiexec -n 4 python mpi5.py
 ~~~
 {: .bash}
 
@@ -120,7 +120,7 @@ if rank == 0:
 Run this program using the command:
 
 ~~~
-mpiexec -np 4 python mpi6.py
+mpiexec -n 4 python mpi6.py
 ~~~
 {: .bash}
 
@@ -171,7 +171,7 @@ if rank == 0:
 Run this program using the command:
 
 ~~~
-mpiexec -np 4 python mpi6.py
+mpiexec -n 4 python mpi6.py
 ~~~
 {: .bash}
 

@@ -70,7 +70,7 @@ print('size=%d, rank=%d' % (size, rank))
 Now run the program using the command:
 
 ~~~
-mpiexec -np 4 python mpi1.py
+mpiexec -n 4 python mpi1.py
 ~~~
 {: .bash}
 
@@ -115,7 +115,7 @@ if rank == 2:
 Run this program using the command:
 
 ~~~
-mpiexec -np 4 python mpi2.py
+mpiexec -n 4 python mpi2.py
 ~~~
 {: .bash}
 
@@ -164,7 +164,7 @@ if rank == 0:
 Run this program using the command:
 
 ~~~
-mpiexec -np 4 python mpi3.py
+mpiexec -n 4 python mpi3.py
 ~~~
 {: .bash}
 
@@ -254,7 +254,7 @@ if rank == 0:
 Run this program using the command:
 
 ~~~
-mpiexec -np 4 python mpi4.py
+mpiexec -n 4 python mpi4.py
 ~~~
 {: .bash}
 
