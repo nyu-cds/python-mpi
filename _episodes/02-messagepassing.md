@@ -86,6 +86,12 @@ size=4, rank=3
 
 What do you notice about the order that the program prints the values in? Hint: try running the program a few times and see what happens.
 
+> ## `mpiexec`
+> The `mpiexec` command is how an MPI program is started. The `-n` argument specifies how many processes (tasks) to start. It is possible to
+> start an MPI with more or less processes than the program is expecting, so it is always a good idea to design the code so that it will
+> accept any number of processes. Alternatively, check how many processes have been started and only run if the number is what you expect.
+{: .callout}
+
 ## One MPI program, multiple MPI processes
 
 When an MPI program is run, each process consists of the same code. However, as we've seen, there is one, and only one, difference: *each 
@@ -115,7 +121,7 @@ if rank == 2:
 Run this program using the command:
 
 ~~~
-mpiexec -n 4 python mpi2.py
+mpiexec -n 3 python mpi2.py
 ~~~
 {: .bash}
 
@@ -129,8 +135,8 @@ You should now see output similar to:
 {: .output}
 
 > ## Challenge
-> Modify the above program to add the statement `print("end of MPI")` as the last line. What happens when you run the program now? Can you explain
-> what you are seeing?
+> Modify the above program to add the statement `print("end of MPI")` as the last line. What happens when you run the program now? What happens if
+> you increase the number of processes to 4? Can you explain what you are seeing?
 {: .challenge}
 
 ## Point-to-point communication
@@ -164,7 +170,7 @@ if rank == 0:
 Run this program using the command:
 
 ~~~
-mpiexec -n 4 python mpi3.py
+mpiexec -n 2 python mpi3.py
 ~~~
 {: .bash}
 
@@ -254,7 +260,7 @@ if rank == 0:
 Run this program using the command:
 
 ~~~
-mpiexec -n 4 python mpi4.py
+mpiexec -n 2 python mpi4.py
 ~~~
 {: .bash}
 

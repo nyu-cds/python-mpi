@@ -17,13 +17,16 @@ keypoints:
 ## Definitions
 
 Program
-: an executable file residing on disk
+: An executable file residing on disk
 
-Process (or task)
-: one or more executing instances of a program. Processes have separate address spaces.
+Process
+: One or more executing instances of a program. Processes have separate address spaces.
+
+Task
+: In MPI, a process is sometimes called a *task*, but these are used interchangably. We will always use "process" rather than "task".
 
 Thread (or lightweight process)
-: one or more threads of control within a process. Threads share the same address space.
+: Ane or more threads of control within a process. Threads share the same address space.
 
 ![definitions]({{ page.root }}/fig/01-prog-proc-thread.png "definitions")
 
