@@ -129,7 +129,7 @@ Where possible - overlap communication and computation
 
 Many problems scale well to only a limited number of processors
 
-Amdahl's law
+## Amdahl's law
 
 ![Amdahl's law]({{ page.root }}/fig/01-speedup.png "Amdahl's law")
 
