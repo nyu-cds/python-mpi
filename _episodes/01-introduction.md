@@ -134,9 +134,9 @@ Amdahl's law
 ![Amdahl's law]({{ page.root }}/fig/01-speedup.png "Amdahl's law")
 
 where
-*speedup* is the theoretical speedup of the execution of the whole program
-*n* is the number of parallel threads/processes
-*P* is the fraction of the algorithm that can be made parallel
+- *speedup* is the theoretical speedup of the execution of the whole program
+- *n* is the number of parallel threads/processes
+- *P* is the fraction of the algorithm that can be made parallel
 
 Basically this is saying that the amount of speedup a program will see by using n cores is based on how much of the program is serial 
 (can only be run on a single CPU core) and how much of it is parallel (can be split up among multiple CPU cores).
