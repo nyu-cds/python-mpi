@@ -3,8 +3,16 @@ title: "Introduction"
 teaching: 30
 exercises: 0
 questions:
+- "What is parallel computing?"
+- "What are the different parallel computing approaches?"
+- "What are the pro's and con's of the different approaches?"
 objectives:
+- "Explain the basics of parallel computing."
 keypoints:
+- "Parallel computing is used to solve problems that are too large for traditional approaches."
+- "There are a variety of techniques for parallel computing."
+- "Different problems may require different techniques."
+- "Amdahl's law defines the limits of parallel computing performance improvements."
 ---
 ## Definitions
 
@@ -138,7 +146,7 @@ where
 - *n* is the number of parallel threads/processes
 - *P* is the fraction of the algorithm that can be made parallel
 
-Basically this is saying that the amount of speedup a program will see by using n cores is based on how much of the program is serial 
+Basically this is saying that the amount of speedup a program will see by using *n* cores is based on how much of the program is serial 
 (can only be run on a single CPU core) and how much of it is parallel (can be split up among multiple CPU cores).
 
 ![amdahl's law]({{ page.root }}/fig/01-amdahls-law.png "amdahl's law")
