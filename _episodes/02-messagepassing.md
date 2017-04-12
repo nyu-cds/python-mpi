@@ -1,6 +1,6 @@
 ---
 title: "Message Passing"
-teaching: 10
+teaching: 40
 exercises: 20
 questions:
 objectives:

@@ -1,7 +1,7 @@
 ---
 title: "Non-blocking Communication"
-teaching: 0
-exercises: 0
+teaching: 20
+exercises: 10
 questions:
 objectives:
 keypoints:
@@ -23,8 +23,11 @@ These methods return a instance of the `Request` class, which uniquely identifys
 ommunication requires careful coordination. Users must ensure that objects exposing their memory buffers are not accessed at the Python level 
 while they are involved in nonblocking message-passing operations.
 
-The following example performs the same simple send and receive as demonstrated previously, however this time it is done with the non blocking 
-versions of the send and receive methods. Create a program called `mpi5.py` with this code:
+The following example performs the same simple blocking send and receive as demonstrated previously, however this time it is done with the 
+non-blocking versions of the send and receive methods. The calls to `Wait()` immediately following the non-blocking methods will block the
+process until the corresponding send and receives have completed.
+
+Create a program called `mpi5.py` with this code:
 
 ~~~
 import numpy
@@ -65,18 +68,21 @@ Process 1 drew the number 0.97400925874
 {: .output}
 
 > ## Challenge
-> What happens if you comment out the `Isend` and both `Wait` calls? Can you explain what you are seeing?
+> What happens if you comment out the line containing `comm.Isend` and *both* lines containing the `comm.Wait` calls? Can you explain what you 
+> are seeing?
 > 
 > Note: if you don't comment out the `Wait` calls, then you have effectively the same code as the blocking verion and it will deadlock. 
 > Also, unless you call `Cancel`, the Python kernel will eventually deadlock anyway as there will be an unequal number of messages posted, 
 > so I don't recommend doing it.
 {: .challenge}
 
-The following code is a non blocking version of the send and receive program. Note there is no need to wait after process 1 sends the message, 
-nor after process 0 sends the reply. However it is necessary for process 1 to wait for the reply so that it knows the message has been fully 
-received before trying to print it out. Similarly, process 0 must wait for the full message before trying to compute randNum * 2. 
+## Non-blocking communiction
 
-Create a program called `mpi6.py` containing this code. Run it to verify the program works.
+Now let's create a truely a non-blocking version of the send and receive program. Note there is no need to wait after process 1 sends the message, 
+nor after process 0 sends the reply. However it is necessary for process 1 to wait for the reply so that it knows the message has been fully 
+received before trying to print it out. Similarly, process 0 must wait for the full message before trying to compute `randNum * 2`. 
+
+Create a program called `mpi6.py` containing this code. Run it to verify the program works as expected.
 
 ~~~
 import numpy
@@ -122,8 +128,10 @@ Process 1 received the number 0.623148825134
 ~~~
 {: .output}
 
+## Overlapping communication and computation
+
 Now let's modify this program so that process 1 overlaps a computation with sending the message and receiving the reply. The computation should be 
-dividing diffNum by 3.14 and printing the result.
+dividing `diffNum` by 3.14 and printing the result.
 
 ~~~
 import numpy
@@ -149,7 +157,7 @@ if rank == 0:
         req = comm.Irecv(randNum, source=1)
         req.Wait()
         print("Process", rank, "received the number", randNum[0])
-        randNum *= 2 # overlap communication
+        randNum *= 2
         comm.Isend(randNum, dest=1)
 ~~~
 {: .python}
@@ -172,5 +180,11 @@ Process 1 received the number 1.93636680934
 ~~~
 {: .output}
 
-It is possible to test without waiting using `Request.Test()`. This method will return `True` when the message operation has completed. 
-To cancel a pending communication, call `Request.Cancel()`.
+## Other operations
+
+The `Request.Wait` method blocks the calling process until a corresponding communication has completed. This is not always desirable, so MPI provides
+a means of testing for completion without waiting. This is done using the `Request.Test()` method, which will return `True` when the message 
+operation has completed. 
+
+When using non-blocking communication, it is sometimes necessary to cancel a pending communication. This is achieved by calling the `Request.Cancel()`
+method.
