@@ -18,6 +18,8 @@ PATH=%PATH%;C:\Program Files\Microsoft MPI\bin
 {: .bash}
 
 If you want to set the `PATH` permanently, follow [these instructions](http://www.computerhope.com/issues/ch000549.htm).
+
+Check that MPI is installed correctly by entering the command `mpiexec` and verifying that the output is as expected.
  
 ## MPI for Python
 
