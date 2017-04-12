@@ -65,50 +65,67 @@ Process 1 drew the number 0.97400925874
 {: .output}
 
 > ## Challenge
-If you commented out the `Isend` and both `Wait` calls you would see that this code will not deadlock (if you don't comment out the `Wait` calls, 
-then you have effectively the same code as before and it will deadlock.) However, unless you call `Cancel`, the Python kernel will eventually 
-deadlock anyway as there will be an unequal number of messages posted, so I don't recommend doing it.
+> What happens if you comment out the `Isend` and both `Wait` calls? Can you explain what you are seeing?
+> 
+> Note: if you don't comment out the `Wait` calls, then you have effectively the same code as the blocking verion and it will deadlock. 
+> Also, unless you call `Cancel`, the Python kernel will eventually deadlock anyway as there will be an unequal number of messages posted, 
+> so I don't recommend doing it.
 {: .challenge}
 
+The following code is a non blocking version of the send and receive program. Note there is no need to wait after process 1 sends the message, 
+nor after process 0 sends the reply. However it is necessary for process 1 to wait for the reply so that it knows the message has been fully 
+received before trying to print it out. Similarly, process 0 must wait for the full message before trying to compute randNum * 2. 
 
-The following code is a non blocking version of the send and receive program. Note there is no need to wait after process 1 sends the message, nor after process 0 sends the reply. However it is necessary for process 1 to wait for the reply so that it knows the message has been fully received before trying to print it out. Similarly, process 0 must wait for the full message before trying to compute randNum * 2. Run it to verify the program works.
-In [37]:
+Create a program called `mpi6.py` containing this code. Run it to verify the program works.
 
-%%px
+~~~
 import numpy
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
-​
+
 randNum = numpy.zeros(1)
 diffNum = numpy.random.random_sample(1)
-​
+
 if rank == 1:
         randNum = numpy.random.random_sample(1)
-        print "Process", rank, "drew the number", randNum[0]
+        print("Process", rank, "drew the number", randNum[0])
         comm.Isend(randNum, dest=0)
         req = comm.Irecv(randNum, source=0)
         req.Wait()
-        print "Process", rank, "received the number", randNum[0]
-​
+        print("Process", rank, "received the number", randNum[0])
+        
 if rank == 0:
-        print "Process", rank, "before receiving has the number", randNum[0]
+        print("Process", rank, "before receiving has the number", randNum[0])
         req = comm.Irecv(randNum, source=1)
         req.Wait()
-        print "Process", rank, "received the number", randNum[0]
+        print("Process", rank, "received the number", randNum[0])
         randNum *= 2
         comm.Isend(randNum, dest=1)
-[stdout:0] 
+~~~
+{: .python}
+
+Run this program using the command:
+
+~~~
+mpiexec -np 4 python mpi6.py
+~~~
+{: .bash}
+
+You should see output similar to the following:
+
+~~~
 Process 0 before receiving has the number 0.0
 Process 0 received the number 0.570093200547
-[stdout:1] 
 Process 1 drew the number 0.570093200547
 Process 1 received the number 0.623148825134
-Modify this program so that process 1 overlaps a computation with sending the message and receiving the reply. The computation should be dividing diffNum by 3.14 and printing the result.
-In [18]:
+~~~
+{: .output}
 
-%%px
-### BEGIN SOLUTION
+Now let's modify this program so that process 1 overlaps a computation with sending the message and receiving the reply. The computation should be 
+dividing diffNum by 3.14 and printing the result.
+
+~~~
 import numpy
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
@@ -119,27 +136,41 @@ diffNum = numpy.random.random_sample(1)
 ​
 if rank == 1:
         randNum = numpy.random.random_sample(1)
-        print "Process", rank, "drew the number", randNum[0]
+        print("Process", rank, "drew the number", randNum[0])
         comm.Isend(randNum, dest=0)
-        diffNum /= 3.14
-        print "diffNum=", diffNum[0]
+        diffNum /= 3.14 # overlap communication
+        print("diffNum=", diffNum[0])
         req = comm.Irecv(randNum, source=0)
         req.Wait()
-        print "Process", rank, "received the number", randNum[0]
+        print("Process", rank, "received the number", randNum[0])
 ​
 if rank == 0:
-        print "Process", rank, "before receiving has the number", randNum[0]
+        print("Process", rank, "before receiving has the number", randNum[0])
         req = comm.Irecv(randNum, source=1)
         req.Wait()
-        print "Process", rank, "received the number", randNum[0]
-        randNum *= 2
+        print("Process", rank, "received the number", randNum[0])
+        randNum *= 2 # overlap communication
         comm.Isend(randNum, dest=1)
-### END SOLUTION
-[stdout:0] 
+~~~
+{: .python}
+
+Run this program using the command:
+
+~~~
+mpiexec -np 4 python mpi6.py
+~~~
+{: .bash}
+
+You should see output similar to the following:
+
+~~~
 Process 0 before receiving has the number 0.0
 Process 0 received the number 0.311574412567
-[stdout:1] 
 Process 1 drew the number 0.311574412567
 diffNum= 0.00213775044313
 Process 1 received the number 1.93636680934
-It is possible to test without waiting using Request.Test(). This method will return True when the message operation has completed. To cancel a pending communication, call Request.Cancel().
+~~~
+{: .output}
+
+It is possible to test without waiting using `Request.Test()`. This method will return `True` when the message operation has completed. 
+To cancel a pending communication, call `Request.Cancel()`.
