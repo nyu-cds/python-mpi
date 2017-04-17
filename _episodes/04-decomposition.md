@@ -65,13 +65,13 @@ An example of the serial code to implement this is:
 
 ~~~
 from math import acos, cos
-​
+
 # Compute the inner sum
-def integral(ai, h, n):
+def integral(a_i, h, n):
     integ = 0.0
     for j in range(n):
-        aij = ai + (j + 0.5) * h
-        integ += cos(aij) * h
+        a_ij = a_i + (j + 0.5) * h
+        integ += cos(a_ij) * h
     return integ
     
 pi = 3.14159265359
@@ -82,13 +82,13 @@ b = pi / 2.0
 h = (b - a) / (n * p)
 
 integral_sum = 0.0
-​
+
 # Compute the outer sum
 for i in range(p):
-    ai = a + i * n * h
-    integral_sum += integral(ai, h, n)
+    a_i = a + i * n * h
+    integral_sum += integral(a_i, h, n)
     
-print "The integral = ", integral_sum
+print("The integral = ", integral_sum)
 ~~~
 {: .python}
 
@@ -130,7 +130,7 @@ ai = a + rank * n * h
 # All processes initialize my_int with their partition calculation
 my_int = numpy.full(1, integral(ai, h, n))
 
-print "Process ", rank, " has the partial integral ", my_int[0]
+print("Process ", rank, " has the partial integral ", my_int[0])
 
 if rank == 0:
     # Process 0 receives all the partitions and computes the sum
@@ -139,7 +139,7 @@ if rank == 0:
         comm.Recv(my_int, source=p)
         integral_sum += my_int[0]
 
-    print "The integral = ", integral_sum
+    print("The integral = ", integral_sum)
 else:
     # All other processes just send their partition values to process 0
     comm.Send(my_int, dest=0)
@@ -149,7 +149,7 @@ else:
 This program can be run with the following command:
 
 ~~~
-mpiexec -n 4 python midpoint.py
+mpiexec -n 4 python midpoint_par.py
 ~~~
 {: .bash}
 
