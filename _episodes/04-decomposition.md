@@ -25,7 +25,7 @@ Key characteristics of domain decomposition are:
 
 There are many different ways to partition the data.
 
-![data partitioning]({{ page.root }}/fig/04-partition.png "data partitioning")
+![data partitioning]({{ page.root }}/fig/04-partitions.png "data partitioning")
 
 Examples of domain decomposition
 - Embarrassingly parallel applications (Monte Carlo simulations)
