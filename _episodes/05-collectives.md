@@ -74,9 +74,9 @@ Scatter is a collective operation that is very similar to broadcast. Scatter inv
 in a communicator. The primary difference between broadcast and scatter is small but important. Broadcast sends the same piece of data to all 
 processes while scatter sends chunks of an array to different processes. Check out the illustration below for further clarification.
 
-![broadcast vs scatter]({{ page.root }}/fig/04-broadcastvsscatter.png "broadcast vs scatter")
+![scatter]({{ page.root }}/fig/04-scatter.png "scatter")
 
-In the illustration, the broadcast takes a single data element at the root process (the red box) and copies it to all other processes. However
+In the previous illustration, the broadcast takes a single data element at the root process (the red box) and copies it to all other processes. However
 the scatter takes an array of elements and distributes the elements in the order of process rank. The first element (in red) goes to process zero, 
 the second element (in green) goes to process one, and so on. Although the root process (process zero) contains the entire array of data, 
 the scatter operation will copy the appropriate element into the receiving buffer of the process. 
