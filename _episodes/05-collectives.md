@@ -31,14 +31,72 @@ The more commonly used collective communication operations are the following:
 - Collective Input/Output
   - Each member of the group reads or writes a section of a file.
 
-Collective communication routines must involve all processes within the scope of a communicator.
+## Collective communication and synchonization points
 
-All processes are by default, members in the communicator `MPI.COMM_WORLD`, however additional communicators can be defined by the programmer 
-(beyond the scope of this course).
+One of the things to remember about collective communication is that it implies a *synchronization point* among processes. This means that all 
+processes must reach a point in their code before they can all begin executing again. 
 
+> Collective communication routines must involve all processes within the scope of a communicator.
 > Unexpected behavior, including program failure, can occur if even one task in the communicator doesn't participate. 
 > It is the programmer's responsibility to ensure that all processes within a communicator participate in any collective operations.
 {: .callout}
+
+As it turns out, MPI has a special function that is dedicated to synchronizing processes: `Comm.Barrier()`.
+
+The name of the function is quite descriptive - the function forms a barrier, and no processes in the communicator can pass the barrier 
+until all of them call the function. Here's an illustration. Imagine the horizontal axis represents execution of the program and the 
+circles represent different processes:
+
+![barrier]({{ page.root }}/fig/04-barrier.png "barrier")
+
+Process zero first calls MPI_Barrier at the first time snapshot (T1). While process zero is hung up at the barrier, process one and three 
+eventually make it (T2). When process two finally makes it to the barrier (T3), all of the processes then begin execution again (T4).
+
+## Broadcasting
+
+A broadcast is one of the standard collective communication techniques. During a broadcast, one process sends the same data to all processes 
+in a communicator. One of the main uses of broadcasting is to send out user input to a parallel program, or send out configuration parameters 
+to all processes.
+
+The communication pattern of a broadcast looks like this:
+
+![broadcast pattern]({{ page.root }}/fig/04-broadcast.png "broadcast pattern")
+
+In this example, process zero is the root process, and it has the initial copy of data. All of the other processes receive the copy of data.
+
+Although the root process and receiver processes do different jobs, they all call the same `Comm.Bcast` function. When the root process 
+(in our example, it was process zero) calls `Comm.Bcast`, the data variable will be sent to all other processes. When all of the receiver
+processes call `Comm.Bcast`, the data variable will be filled in with the data from the root process.
+
+## Scatter
+
+Scatter is a collective operation that is very similar to broadcast. Scatter involves a designated root process sending data to all processes 
+in a communicator. The primary difference between broadcast and scatter is small but important. Broadcast sends the same piece of data to all 
+processes while scatter sends chunks of an array to different processes. Check out the illustration below for further clarification.
+
+![broadcast vs scatter]({{ page.root }}/fig/04-broadcastvsscatter.png "broadcast vs scatter")
+
+In the illustration, the broadcast takes a single data element at the root process (the red box) and copies it to all other processes. However
+the scatter takes an array of elements and distributes the elements in the order of process rank. The first element (in red) goes to process zero, 
+the second element (in green) goes to process one, and so on. Although the root process (process zero) contains the entire array of data, 
+the scatter operation will copy the appropriate element into the receiving buffer of the process. 
+
+The `Comm.Scatter` method takes three arguments. The first is an array of data that resides on the root process. The second 
+parameter is used to hold the received data. The last parameter indicates the root process that is scattering the array of data.
+
+## Gather
+
+Gather is the inverse of scatter. Instead of spreading elements from one process to many processes, the gather operation takes elements from 
+many processes and gathers them to one single process. This routine is highly useful to many parallel algorithms, such as parallel 
+sorting and searching. Below is a simple illustration of this algorithm.
+
+![gather]({{ page.root }}/fig/04-gather.png "gatherr")
+
+Similar to scatter, gather takes elements from each process and gathers them to the root process. The elements are ordered by the rank of the 
+process from which they were received. 
+
+The `Comm.Gather` method takes the same arguments as `Comm.Scatter`. Howeverm, in the gather operation, only the root process needs to have a 
+valid receive buffer.
 
 ## Example collective operations
 
