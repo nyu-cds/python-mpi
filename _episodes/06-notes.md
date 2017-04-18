@@ -3,7 +3,7 @@ title: "Final Notes"
 teaching: 10
 exercises: 0
 questions:
-- "What are the other imporatant aspects of mpi4py?"
+- "What are the other important aspects of mpi4py?"
 objectives:
 - "Learn about how mpi4py can handle different types of data."
 keypoints:
