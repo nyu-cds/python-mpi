@@ -10,7 +10,7 @@ objectives:
 - "See how collective communication can be used in practice."
 keypoints:
 - "Collective communication allows data to be sent or received from multiple processes simultaneously."
-- "Collective operations fall into three broad categories: synchonization, communication, and computation."
+- "Collective operations fall into the broad categories: synchonization, communication, computation, and I/O."
 ---
 There are many situations in parallel programming when groups of processes need to exchange messages. Rather than explicitly sending and receiving 
 such messages as we have been doing, the real power of MPI comes from group operations known as *collectives*.
@@ -28,6 +28,8 @@ The more commonly used collective communication operations are the following:
   - Scatter data from one member to all members of a group
 - Collective computation (reductions)
   - One member of the group collects data from the other members and performs an operation (min, max, add, multiply, etc.) on that data.
+- Collective Input/Output
+  - Each member of the group reads or writes a section of a file.
 
 Collective communication routines must involve all processes within the scope of a communicator.
 
@@ -74,6 +76,14 @@ All processes are by default, members in the communicator `MPI.COMM_WORLD`, howe
 > - `MPI.BOR` - Performs a bitwise or across the bits of the elements.
 > - `MPI.MAXLOC` - Returns the maximum value and the rank of the process that owns it.
 > - `MPI.MINLOC` - Returns the minimum value and the rank of the process that owns it.
+{: .callout}
+
+> ## `File.Open(comm, filename, amode, info)`
+> Opens the file on all processes in the communicator group.
+{: .callout}
+
+> ## `File.Write_all(buffer)`
+> Collective write operation.
 {: .callout}
 
 ## Parallel collective version of Mid-point rule
