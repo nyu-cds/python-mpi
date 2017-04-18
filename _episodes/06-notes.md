@@ -7,7 +7,7 @@ questions:
 objectives:
 - "Learn about how mpi4py can handle different types of data."
 keypoints:
-- "mpi4py provides different methods to handle buffer-like and generic objects.
+- "mpi4py provides different methods to handle buffer-like and generic objects."
 ---
 ## Communication of buffer-like objects 
 

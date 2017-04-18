@@ -31,7 +31,7 @@ The more commonly used collective communication operations are the following:
 
 Collective communication routines must involve all processes within the scope of a communicator.
 
-All processes are by default, members in the communicator MPI.COMM_WORLD, however additional communicators can be defined by the programmer 
+All processes are by default, members in the communicator `MPI.COMM_WORLD`, however additional communicators can be defined by the programmer 
 (beyond the scope of this course).
 
 > Unexpected behavior, including program failure, can occur if even one task in the communicator doesn't participate. 
@@ -40,40 +40,40 @@ All processes are by default, members in the communicator MPI.COMM_WORLD, howeve
 
 ## Example collective operations
 
-> ## Comm.Barrier()
+> ## `Comm.Barrier()`
 > Synchronization operation. Creates a barrier synchronization in a group. Each task, when reaching the Barrier() call, blocks until all 
-> tasks in the group reach a Barrier() call. Then all tasks are free to proceed.
+> tasks in the group reach a `Barrier()` call. Then all tasks are free to proceed.
 {: .callout}
 
-> ## Comm.Bcast(buf, root=0)
+> ## `Comm.Bcast(buf, root=0)`
 > Data movement operation. Broadcasts (sends) a message from the process with rank "root" to all other processes in the group.
 {: .callout}
 
-> ## Comm.Scatter(sendbuf, recvbuf, root=0)
+> ## `Comm.Scatter(sendbuf, recvbuf, root=0)`
 > Data movement operation. Distributes distinct messages from a single source task to each task in the group.
 {: .callout}
 
-> ## Comm.Gather(sendbuf, recvbuf, root=0)
+> ## `Comm.Gather(sendbuf, recvbuf, root=0)`
 > Data movement operation. Gathers distinct messages from each task in the group to a single destination task. This routine is the reverse 
-> operation of Scatter().
+> operation of `Scatter()`.
 {: .callout}
 
-> ## Comm.Alltoall(sendbuf, recvbuf)
+> ## `Comm.Alltoall(sendbuf, recvbuf)`
 > All-to-all Scatter/Gather, send data from all to all processes in a group.
 {: .callout}
 
-> ## Comm.Reduce(sendbuf, recvbuf, op=MPI.SUM, root=0)
+> ## `Comm.Reduce(sendbuf, recvbuf, op=MPI.SUM, root=0)`
 > Reduces values on all processes to a single value by applying the operation op. Operations include:
-> - MPI.MAX - Returns the maximum element.
-> - MPI.MIN - Returns the minimum element.
-> - MPI.SUM - Sums the elements.
-> - MPI.PROD - Multiplies all elements.
-> - MPI.LAND - Performs a logical and across the elements.
-> - MPI.LOR - Performs a logical or across the elements.
-> - MPI.BAND - Performs a bitwise and across the bits of the elements.
-> - MPI.BOR - Performs a bitwise or across the bits of the elements.
-> - MPI.MAXLOC - Returns the maximum value and the rank of the process that owns it.
-> - MPI.MINLOC - Returns the minimum value and the rank of the process that owns it.
+> - `MPI.MAX` - Returns the maximum element.
+> - `MPI.MIN` - Returns the minimum element.
+> - `MPI.SUM` - Sums the elements.
+> - `MPI.PROD` - Multiplies all elements.
+> - `MPI.LAND` - Performs a logical and across the elements.
+> - `MPI.LOR` - Performs a logical or across the elements.
+> - `MPI.BAND` - Performs a bitwise and across the bits of the elements.
+> - `MPI.BOR` - Performs a bitwise or across the bits of the elements.
+> - `MPI.MAXLOC` - Returns the maximum value and the rank of the process that owns it.
+> - `MPI.MINLOC` - Returns the minimum value and the rank of the process that owns it.
 {: .callout}
 
 ## Parallel collective version of Mid-point rule
