@@ -49,7 +49,7 @@ circles represent different processes:
 
 ![barrier]({{ page.root }}/fig/04-barrier.png "barrier")
 
-Process zero first calls MPI_Barrier at the first time snapshot (T1). While process zero is hung up at the barrier, process one and three 
+Process zero first calls `Barrier` at the first time snapshot (T1). While process zero is hung up at the barrier, process one and three 
 eventually make it (T2). When process two finally makes it to the barrier (T3), all of the processes then begin execution again (T4).
 
 ## Broadcasting
@@ -90,13 +90,41 @@ Gather is the inverse of scatter. Instead of spreading elements from one process
 many processes and gathers them to one single process. This routine is highly useful to many parallel algorithms, such as parallel 
 sorting and searching. Below is a simple illustration of this algorithm.
 
-![gather]({{ page.root }}/fig/04-gather.png "gatherr")
+![gather]({{ page.root }}/fig/04-gather.png "gather")
 
 Similar to scatter, gather takes elements from each process and gathers them to the root process. The elements are ordered by the rank of the 
 process from which they were received. 
 
 The `Comm.Gather` method takes the same arguments as `Comm.Scatter`. Howeverm, in the gather operation, only the root process needs to have a 
 valid receive buffer.
+
+## Reduction
+
+Reduce is a classic concept from functional programming. Data reduction involves reducing a set of numbers into a smaller set of numbers via a 
+function. For example, let's say we have a list of numbers `[1, 2, 3, 4, 5]`. Reducing this list of numbers with the sum function would produce 
+`sum([1, 2, 3, 4, 5]) = 15`. Similarly, the multiplication reduction would yield `multiply([1, 2, 3, 4, 5]) = 120`.
+
+As you might have imagined, it can be very cumbersome to apply reduction functions across a set of distributed numbers. Along with that, it is 
+difficult to efficiently program non-commutative reductions, i.e. reductions that must occur in a set order. Luckily, there is a handy function 
+called `Comm.Reduce` that will handle almost all of the common reductions that a programmer needs to do in a parallel application.
+
+The `Comm.Reduce` method takes an array of input elements and returns an array of output elements to the root process. The output elements contain 
+the reduced result. MPI contains a set of common reduction operations that can be used, although custom reduction operations can also be defined.
+
+The following diagram shows the communication pattern for a reducation:
+
+![reduction]({{ page.root }}/fig/04-reduce.png "reduction")
+
+In the above, each process contains one integer. The reduction operation is called with a root process of 0 and using MPI_SUM as the reduction 
+operation. The four numbers are summed to the result and stored on the root process.
+
+It is also useful to see what happens when processes contain multiple elements. The illustration below shows reduction of multiple numbers per process.
+
+![reduction with multiple elements]({{ page.root }}/fig/04-multireduce.png "reduction with multiple elements")
+
+The processes from the above illustration each have two elements. The resulting summation happens on a per-element basis. In other words, instead 
+of summing all of the elements from all the arrays into one element, the i<sup>th</sup> element from each array are summed into the i<sup>th</sup> element in result array 
+of process 0.
 
 ## Example collective operations
 
@@ -180,9 +208,9 @@ if rank == 0:
     n = numpy.full(1, 500) # default value
     
 # Broadcast n to all processes
-print "Process ", rank, " before n = ", n[0]
+print("Process ", rank, " before n = ", n[0])
 comm.Bcast(n, root=0)
-print "Process ", rank, " after n = ", n[0]
+print("Process ", rank, " after n = ", n[0])
 
 # Compute partition
 h = (b - a) / (n * size) # calculate h *after* we receive n
@@ -190,12 +218,12 @@ a_i = a + rank * h * n
 my_int[0] = integral(a_i, h ,n)
 
 # Send partition back to root process, computing sum across all partitions
-print "Process ", rank, " has the partial integral ", my_int[0]
+print("Process ", rank, " has the partial integral ", my_int[0])
 comm.Reduce(my_int, integral_sum, MPI.SUM, dest)
 
 # Only print the result in process 0
 if rank == 0:
-    print 'The Integral Sum =', integral_sum[0]
+    print('The Integral Sum =', integral_sum[0])
 ~~~
 {: .python}
 
