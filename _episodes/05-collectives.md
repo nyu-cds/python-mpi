@@ -80,9 +80,9 @@ All processes are by default, members in the communicator `MPI.COMM_WORLD`, howe
 
 The example below shows how the mid-point rule can be computed using collective operations.
 
-We choose to broadcast the number of increments per partition n to each process, although this is not strictly necessary. Once the processes 
-have received n they are able to compute their partition. The processes then send the values back to the root process using `Reduce` which 
-automatically computes the sum of all the values and places the result in integral_sum.
+We choose to broadcast the number of increments per partition `n to each process, although this is not strictly necessary. Once the processes 
+have received `n` they are able to compute their partition. The processes then send the values back to the root process using `Reduce` which 
+automatically computes the sum of all the values and places the result in `integral_sum`.
 
 ~~~
 import numpy
