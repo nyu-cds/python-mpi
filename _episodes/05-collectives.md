@@ -1,10 +1,16 @@
 ---
 title: "Collective Operations"
-teaching: 0
-exercises: 0
+teaching: 30
+exercises: 20
 questions:
+- "What is the difference between point-to-point and collective communication?" 
 objectives:
+- "Understand the basics of collective communication."
+- "Learn about the different types of collective communication."
+- "See how collective communication can be used in practice."
 keypoints:
+- "Collective communication allows data to be sent or received from multiple processes simultaneously."
+- "Collective operations fall into three broad categories: synchonization, communication, and computation."
 ---
 There are many situations in parallel programming when groups of processes need to exchange messages. Rather than explicitly sending and receiving 
 such messages as we have been doing, the real power of MPI comes from group operations known as *collectives*.
@@ -34,35 +40,41 @@ All processes are by default, members in the communicator MPI.COMM_WORLD, howeve
 
 ## Example collective operations
 
-Comm.Barrier()
-Synchronization operation. Creates a barrier synchronization in a group. Each task, when reaching the Barrier() call, blocks until all 
-tasks in the group reach a Barrier() call. Then all tasks are free to proceed.
+> ## Comm.Barrier()
+> Synchronization operation. Creates a barrier synchronization in a group. Each task, when reaching the Barrier() call, blocks until all 
+> tasks in the group reach a Barrier() call. Then all tasks are free to proceed.
+{: .callout}
 
-Comm.Bcast(buf, root=0)
-Data movement operation. Broadcasts (sends) a message from the process with rank "root" to all other processes in the group.
+> ## Comm.Bcast(buf, root=0)
+> Data movement operation. Broadcasts (sends) a message from the process with rank "root" to all other processes in the group.
+{: .callout}
 
-Comm.Scatter(sendbuf, recvbuf, root=0)
-Data movement operation. Distributes distinct messages from a single source task to each task in the group.
+> ## Comm.Scatter(sendbuf, recvbuf, root=0)
+> Data movement operation. Distributes distinct messages from a single source task to each task in the group.
+{: .callout}
 
-Comm.Gather(sendbuf, recvbuf, root=0)
-Data movement operation. Gathers distinct messages from each task in the group to a single destination task. This routine is the reverse 
-operation of Scatter().
+> ## Comm.Gather(sendbuf, recvbuf, root=0)
+> Data movement operation. Gathers distinct messages from each task in the group to a single destination task. This routine is the reverse 
+> operation of Scatter().
+{: .callout}
 
-Comm.Alltoall(sendbuf, recvbuf)
-All-to-all Scatter/Gather, send data from all to all processes in a group.
+> ## Comm.Alltoall(sendbuf, recvbuf)
+> All-to-all Scatter/Gather, send data from all to all processes in a group.
+{: .callout}
 
-Comm.Reduce(sendbuf, recvbuf, op=MPI.SUM, root=0)
-Reduces values on all processes to a single value by applying the operation op. Operations include:
-MPI.MAX - Returns the maximum element.
-MPI.MIN - Returns the minimum element.
-MPI.SUM - Sums the elements.
-MPI.PROD - Multiplies all elements.
-MPI.LAND - Performs a logical and across the elements.
-MPI.LOR - Performs a logical or across the elements.
-MPI.BAND - Performs a bitwise and across the bits of the elements.
-MPI.BOR - Performs a bitwise or across the bits of the elements.
-MPI.MAXLOC - Returns the maximum value and the rank of the process that owns it.
-MPI.MINLOC - Returns the minimum value and the rank of the process that owns it.
+> ## Comm.Reduce(sendbuf, recvbuf, op=MPI.SUM, root=0)
+> Reduces values on all processes to a single value by applying the operation op. Operations include:
+> - MPI.MAX - Returns the maximum element.
+> - MPI.MIN - Returns the minimum element.
+> - MPI.SUM - Sums the elements.
+> - MPI.PROD - Multiplies all elements.
+> - MPI.LAND - Performs a logical and across the elements.
+> - MPI.LOR - Performs a logical or across the elements.
+> - MPI.BAND - Performs a bitwise and across the bits of the elements.
+> - MPI.BOR - Performs a bitwise or across the bits of the elements.
+> - MPI.MAXLOC - Returns the maximum value and the rank of the process that owns it.
+> - MPI.MINLOC - Returns the minimum value and the rank of the process that owns it.
+{: .callout}
 
 ## Parallel collective version of Mid-point rule
 
@@ -80,11 +92,11 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-def integral(ai, h, n):
+def integral(a_i, h, n):
     integ = 0.0
     for j in range(n):
-        aij = ai + (j + 0.5) * h
-        integ += cos(aij) * h
+        a_ij = a_i + (j + 0.5) * h
+        integ += cos(a_ij) * h
     return integ
 
 pi = 3.14159265359
@@ -106,8 +118,8 @@ print "Process ", rank, " after n = ", n[0]
 
 # Compute partition
 h = (b - a) / (n * size) # calculate h *after* we receive n
-ai = a + rank * h * n
-my_int[0] = integral(ai, h ,n)
+a_i = a + rank * h * n
+my_int[0] = integral(a_i, h ,n)
 
 # Send partition back to root process, computing sum across all partitions
 print "Process ", rank, " has the partial integral ", my_int[0]

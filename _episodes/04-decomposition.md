@@ -1,10 +1,17 @@
 ---
 title: "Problem Decomposition"
-teaching: 0
+teaching: 30
 exercises: 0
 questions:
+- "How do I structure my data and program to work in parallel?"
 objectives:
+- "Understand the main strategies for parallelizing algorithms and data."
+- "Learn about different decomposition techniques."
+- "See how decomposition is used on a real problem."
 keypoints:
+- "Domain decomposition is how data is partitioned."
+- "Functional decomposition is how an algorithm is partitioned."
+- "Some problems are better suited to one type of decomposition than others."
 ---
 
 One of the first steps in designing a parallel program is to break the problem into discrete "chunks" of work that can be distributed to multiple 
@@ -113,11 +120,11 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-def integral(ai, h, n):
+def integral(a_i, h, n):
     integ = 0.0
     for j in range(n):
-        aij = ai + (j + 0.5) * h
-        integ += cos(aij) * h
+        a_ij = a_i + (j + 0.5) * h
+        integ += cos(a_ij) * h
     return integ
 
 pi = 3.14159265359
@@ -125,10 +132,10 @@ n = 500
 a = 0.0
 b = pi / 2.0
 h = (b - a) / (n * size)
-ai = a + rank * n * h
+a_i = a + rank * n * h
 
 # All processes initialize my_int with their partition calculation
-my_int = numpy.full(1, integral(ai, h, n))
+my_int = numpy.full(1, integral(a_i, h, n))
 
 print("Process ", rank, " has the partial integral ", my_int[0])
 
