@@ -199,14 +199,15 @@ pi = 3.14159265359
 a = 0.0
 b = pi / 2.0
 dest = 0
-n = numpy.zeros(1)
 my_int = numpy.zeros(1)
 integral_sum = numpy.zeros(1)
 
 # Initialize value of n only if this is rank 0
 if rank == 0:
-    n = numpy.full(1, 500) # default value
-    
+    n = numpy.full(1, 500, dtype=int) # default value
+else:
+    n = numpy.zeros(1, dtype=int)
+
 # Broadcast n to all processes
 print("Process ", rank, " before n = ", n[0])
 comm.Bcast(n, root=0)
@@ -215,7 +216,7 @@ print("Process ", rank, " after n = ", n[0])
 # Compute partition
 h = (b - a) / (n * size) # calculate h *after* we receive n
 a_i = a + rank * h * n
-my_int[0] = integral(a_i, h ,n)
+my_int[0] = integral(a_i, h, n[0])
 
 # Send partition back to root process, computing sum across all partitions
 print("Process ", rank, " has the partial integral ", my_int[0])
@@ -237,19 +238,19 @@ mpiexec -n 4 python midpoint_coll.py
 The following is an example of the output generated:
 
 ~~~
-Process  0  before n =  500.0
-Process  0  after n =  500.0
+Process  0  before n =  500
+Process  3  before n =  0
+Process  1  before n =  0
+Process  2  before n =  0
+Process  0  after n =  500
+Process  2  after n =  500
+Process  1  after n =  500
+Process  3  after n =  500
 Process  0  has the partial integral  0.382683442201
-The Integral Sum = 1.0000000257
-Process  1  before n =  0.0
-Process  1  after n =  500.0
 Process  1  has the partial integral  0.32442335716
-Process  2  before n =  0.0
-Process  2  after n =  500.0
 Process  2  has the partial integral  0.216772756896
-Process  3  before n =  0.0
-Process  3  after n =  500.0
 Process  3  has the partial integral  0.0761204694451
+The Integral Sum = 1.0000000257
 ~~~
 {: .output}
 
